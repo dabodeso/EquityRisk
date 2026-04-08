@@ -1,5 +1,6 @@
 streamlit>=1.35.0
-pandas>=2.2.0
+# pandas 3.x rompe pandas-datareader 0.10 (deprecate_kwarg); FRED usa datareader
+pandas>=2.2.0,<3.0
 pandas-datareader==0.10.0
 numpy>=1.26.0
 yfinance>=0.2.40
