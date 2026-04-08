@@ -9,6 +9,7 @@ Los datos se persisten en CSV para evitar llamadas repetidas a la red.
 
 import os
 import logging
+import time
 from typing import Optional
 
 import pandas as pd
@@ -103,12 +104,16 @@ def fetch_prices(
     all_tickers = list(set(tickers))
     logger.info("Descargando precios para %d tickers…", len(all_tickers))
 
+    # threads=False y pausa breve reducen errores 429 (Yahoo) en IPs compartidas (p. ej. Streamlit Cloud)
+    if len(all_tickers) > 8:
+        time.sleep(2.0)
     raw = yf.download(
         all_tickers,
         start=start,
         end=end,
         auto_adjust=True,
         progress=False,
+        threads=False,
     )
 
     # yfinance devuelve MultiIndex cuando hay varios tickers
